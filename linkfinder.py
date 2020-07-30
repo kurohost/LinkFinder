@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3.6
 # Python 3
 # LinkFinder
 # By Gerben_Javado
@@ -230,7 +230,16 @@ def parser_file(content, regex_str, mode=1, more_regex=None, no_dup=1):
         else:
             filtered_items.append(item)
 
-    return filtered_items
+    # add the URL if the endpoint is only "/test-endpoint"
+    with_url_items = []
+    for item in filtered_items:
+        if item["link"].startswith("/") and not item["link"].startswith("//"):
+            item["link"] = url + item["link"]
+        elif item["link"].startswith("//"):
+            item["link"] = "http:" + item["link"]
+        with_url_items.append(item)
+
+    return with_url_items
 
 def cli_output(endpoints):
     '''
